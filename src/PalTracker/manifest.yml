@@ -1,0 +1,13 @@
+﻿---
+applications:
+- name: addnotes-processor-dev
+  buildpack: dicf_dotnet_core_buildpack_latest
+  stack: cflinuxfs2
+  command: dotnet AddNotesProcessor.dll
+  instances: 1
+  memory: 1GB
+  disk_quota: 1GB
+  health-check-type: none
+  timeout: 80
+env:
+  ASPNETCORE_ENVIRONMENT: Development

@@ -1,13 +1,8 @@
 ﻿---
 applications:
-- name: addnotes-processor-dev
-  buildpack: dicf_dotnet_core_buildpack_latest
-  stack: cflinuxfs2
-  command: dotnet AddNotesProcessor.dll
-  instances: 1
-  memory: 1GB
-  disk_quota: 1GB
-  health-check-type: none
-  timeout: 80
-env:
-  ASPNETCORE_ENVIRONMENT: Development
+- name: pal-tracker
+  path: src/PalTracker/bin/Release/netcoreapp2.1/publish/
+  routes:
+  - route: msg-pal-tracker-review.apps.pikes.pal.pivotal.io
+  env:
+    WELCOME_MESSAGE: Hello from the review environment

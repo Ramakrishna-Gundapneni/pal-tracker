@@ -10,8 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
-//using Steeltoe.Management.CloudFoundry;
-//using Steeltoe.Management.Endpoint.CloudFoundry;
+using Steeltoe.Management.CloudFoundry;
+using Steeltoe.Management.Endpoint.CloudFoundry;
+using Steeltoe.Common.HealthChecks;
+using Steeltoe.Management.Endpoint.Info;
 
 namespace PalTracker
 {
@@ -39,7 +41,10 @@ Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configure
 				//services.AddSingleton<ITimeEntryRepository, InMemoryTimeEntryRepository>();
 				services.AddScoped<ITimeEntryRepository, MySqlTimeEntryRepository>();
 				services.AddDbContext<TimeEntryContext>(options => options.UseMySql(Configuration));
-	//			services.AddCloudFoundryActuators(Configuration);
+				services.AddCloudFoundryActuators(Configuration);
+				services.AddSingleton<IHealthContributor, TimeEntryHealthContributor>();
+				services.AddSingleton<IOperationCounter<TimeEntry>, OperationCounter<TimeEntry>>();
+				services.AddSingleton<IInfoContributor, TimeEntryInfoContributor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +56,7 @@ Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configure
             }
 
             app.UseMvc();
-		//	app.UseCloudFoundryActuators();
+			app.UseCloudFoundryActuators();
         }
     }
 }
